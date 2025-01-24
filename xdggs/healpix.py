@@ -308,6 +308,18 @@ class HealpixInfo(DGGSInfo):
 
         return backend_func(vertices)
 
+    def parents(self, cell_ids, level):
+        if level >= self.level:
+            raise ValueError(f"given level is not a parent: {level} >= {self.level}")
+
+        # TODO: reimplement using `cdshealpix`
+        offset = self.level - level
+        x, y, f = healpy.pix2xyf(self.nside, cell_ids, nest=self.nest)
+        x_ = x >> offset
+        y_ = y >> offset
+
+        return healpy.xyf2pix(self.nside, x_, y_, f, nest=self.nest)
+
 
 @register_dggs("healpix")
 class HealpixIndex(DGGSIndex):
