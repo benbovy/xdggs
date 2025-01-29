@@ -95,6 +95,9 @@ class DGGSIndex(Index):
     def cell_boundaries(self) -> np.ndarray:
         return self.grid_info.cell_boundaries(self._pd_index.index.values)
 
+    def parents(self, resolution: int) -> np.ndarray:
+        return self._grid.parents(self._pd_index.index.values, resolution=resolution)
+
     @property
     def grid_info(self) -> DGGSInfo:
         return self._grid

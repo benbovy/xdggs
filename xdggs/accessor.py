@@ -174,6 +174,26 @@ class DGGSAccessor:
             boundaries, coords={self._name: self.cell_ids}, dims=self.cell_ids.dims
         )
 
+    def parents(self, level: int) -> xr.DataArray:
+        """determine the parent cell ids of the cells
+
+        Parameters
+        ----------
+        level : int
+            The parent resolution level. Must be smaller than the current resolution.
+
+        Returns
+        -------
+        parents : DataArray
+            The parent cell ids, one for each input cell.
+        """
+        data = self.index.parents(level)
+
+        params = self.grid_info.to_dict()
+        params["resolution"] = level
+
+        return self.coord.copy(data=data).assign_attrs(**params).rename("parents")
+
     def explore(self, *, cmap="viridis", center=None, alpha=None):
         """interactively explore the data using `lonboard`
 

@@ -201,6 +201,14 @@ class H3Info(DGGSInfo):
             raise ValueError("invalid backend: {backend!r}")
         return backend_func(wkb)
 
+    def parents(self, cell_ids, resolution):
+        if resolution >= self.resolution:
+            raise ValueError(
+                f"resolution is not a parent: {resolution} >= {self.resolution}"
+            )
+
+        return change_resolution(cell_ids, resolution)
+
 
 @register_dggs("h3")
 class H3Index(DGGSIndex):
